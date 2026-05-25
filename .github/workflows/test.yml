@@ -31,7 +31,7 @@ jobs:
 
       - name: Deploy to Staging S3
         if: github.ref == 'refs/heads/develop'
-        run: aws s3 sync . s3://travel-site-stg-bucket-076589004675-ap-northeast-1-an --delete --exclude ".git/*" --exclude ".github/*"
+        run: aws s3 sync . s3://travel-site-stg-bucket-076589004675-ap-northeast-1-an --delete --exclude ".git/*" --exclude ".github/*" --exclude "sitemap.xml"
 
       - name: Clear Staging CloudFront Cache
         if: github.ref == 'refs/heads/develop'
