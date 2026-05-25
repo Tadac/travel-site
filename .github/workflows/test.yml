@@ -44,3 +44,18 @@ jobs:
       - name: Clear Production CloudFront Cache
         if: github.ref == 'refs/heads/main'
         run: aws cloudfront create-invalidation --distribution-id E2244AII0JXCGP --paths "/*"
+
+        - name: Remove GTM tags for staging
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          sed -i 's|<!-- GTM_HEAD -->||' index.html
+          sed -i 's|<!-- GTM_BODY -->||' index.html
+
+      - name: Insert GTM tags for production
+         if: github.ref == 'refs/heads/main'
+        run: |
+          GTM_HEAD=$(cat env/gtm-head-prod.html)
+          GTM_BODY=$(cat env/gtm-body-prod.html)
+
+          sed -i "s|<!-- GTM_HEAD -->|$GTM_HEAD|" index.html
+          sed -i "s|<!-- GTM_BODY -->|$GTM_BODY|" index.html
