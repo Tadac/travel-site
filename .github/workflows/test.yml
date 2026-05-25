@@ -21,6 +21,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
+      - name: Use staging robots.txt
+        if: github.ref == 'refs/heads/develop'
+        run: cp env/robots-stg.txt robots.txt
+
+      - name: Use production robots.txt
+        if: github.ref == 'refs/heads/main'
+        run: cp env/robots-prod.txt robots.txt
+
       - name: Deploy to Staging S3
         if: github.ref == 'refs/heads/develop'
         run: aws s3 sync . s3://travel-site-stg-bucket-076589004675-ap-northeast-1-an --delete --exclude ".git/*" --exclude ".github/*"
