@@ -29,6 +29,12 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: cp env/robots-prod.txt robots.txt
 
+      - name: Insert GTM tags for production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          perl -0pi -e 's|<!-- GTM_HEAD -->|`cat env/gtm-head-prod.html`|e' index.html
+          perl -0pi -e 's|<!-- GTM_BODY -->|`cat env/gtm-body-prod.html`|e' index.html
+
       - name: Remove GTM tags for staging
         if: github.ref == 'refs/heads/develop'
         run: |
